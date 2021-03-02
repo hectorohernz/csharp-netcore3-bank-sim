@@ -10,5 +10,7 @@ namespace BankApp.Services.ApplicationServices
         int IsUserNew();
 
         User newUser();
+
+        User login();
     }
 }

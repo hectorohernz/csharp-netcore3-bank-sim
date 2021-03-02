@@ -21,11 +21,13 @@ namespace BankAppTest
         [Fact]
         public void TestCreateNewUser()
         {
-            string name = "Hector Hernandez";
-            string email = "hector@gmail.com";
-            string password = "password1";
-            string username = "testingusername";
-            User user = userSer.CreateNewUser(name, email, password, username);
+            string name = "test2 test2";
+            string email = "test2@gmail.com";
+            string password = "test2";
+            string username = "test2";
+            User tempUser = new User(name, email, password, username);
+           
+            User user = userSer.CreateNewUser(tempUser);
 
             Assert.NotNull(user);
         }
@@ -39,8 +41,8 @@ namespace BankAppTest
             string email = "hector@gmail.com";
             string password = "password1";
             string username = "testingusername";
-            User user = userSer.CreateNewUser(name, email, password, username);
-
+            User tempUser = new User(name, email, password, username);
+            User user = userSer.CreateNewUser(tempUser);
             Assert.Null(user);
         }
 

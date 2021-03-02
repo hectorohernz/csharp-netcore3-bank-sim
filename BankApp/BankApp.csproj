@@ -19,6 +19,7 @@
     <Folder Include="Services\UserServices\" />
     <Folder Include="Helpers\" />
     <Folder Include="Helpers\View\" />
+    <Folder Include="Services\AccountServices\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Database\mock.json">

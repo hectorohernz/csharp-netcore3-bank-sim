@@ -1,0 +1,16 @@
+{
+  "Data": {
+    "test": {
+      "accounts": [
+        {
+          "name": "test-account",
+          "amount": 1000.25,
+          "ownerUsername": "test"
+        }
+      ]
+    },
+    "test2": {
+      "accounts": []
+    }
+  }
+}

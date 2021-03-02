@@ -7,6 +7,8 @@ using Xunit.Abstractions;
 
 namespace BankAppTest
 {
+    
+
     public class UnitTest1
     {
 
@@ -26,7 +28,7 @@ namespace BankAppTest
 
             IList<User> isUser = jsonService.listOfUser();
 
-            int exepected = 1;
+            int exepected = 4;
 
             int acc = isUser.Count;
 
@@ -43,7 +45,7 @@ namespace BankAppTest
         {
             JsonService jsonService = new JsonService();
 
-            User user = new User("Hector Hernandez","Hector@gma.com", "password3", "Jim");
+            User user = new User("test2 test2", "test2@gmail.com", "test2", "test2");
 
             jsonService.addNewUser(user);
 
@@ -58,13 +60,13 @@ namespace BankAppTest
         [Fact]
         public void TestGetUserByUsername()
         {
-            string username = "hectorohernz";
+            string username = "test2";
 
             JsonService jsonService = new JsonService();
 
             User user = jsonService.getUserByUsername(username);
 
-            Assert.Null(user);
+            Assert.NotNull(user);
         }
 
 

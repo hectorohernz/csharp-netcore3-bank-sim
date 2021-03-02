@@ -17,26 +17,41 @@ namespace BankApp.Application
 
             // ToDo: Greeting the user 
             appSer.Greetings();
-
-            //
+            
             int option = appSer.IsUserNew();
+
             bool isUserNew = option == 2 ? true : false;
+
+            User user;
 
             if (isUserNew)
             {
                 // ToDo: Create an account
-                User user = appSer.newUser();
+                user = appSer.newUser();
                 userServices.CreateNewUser(user);
                 viewHelper.Successmessage("Thanks For Signing up");
             }
             else
             {
-                // ToDo: Login Verfication 
-                viewHelper.Successmessage("Welcome Back !");
+                user = appSer.login();
+                if (user == null)
+                {
+                    user = appSer.newUser();
+                    userServices.CreateNewUser(user);
+                    viewHelper.Successmessage("\n Thanks For Signing up \n");
+                }
             }
 
-            // ToDo: Prompt following questions to
-            // Exit, Create New Account, Widthdraw, Deposit,
+
+            do
+            {
+
+
+
+            } while (true);
+
+
+     
 
         }
 

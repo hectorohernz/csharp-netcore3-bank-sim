@@ -23,7 +23,7 @@ namespace BankApp.Services.ApplicationServices
 
 ";
             viewHelper.Message(logo);
-            string title = "E-Corp Banking System";
+            string title = "\n E-Corp Banking System V1.0.0 \n";
             viewHelper.Message(title);
         }
 
@@ -33,7 +33,7 @@ namespace BankApp.Services.ApplicationServices
             viewHelper.Message("Select Any of the following options:");
             viewHelper.Message("1: Log In ");
             viewHelper.Message("2: Sign Up ");
-
+            viewHelper.AskQuestion("Enter:");
             int num;
             bool success;
             do
@@ -60,6 +60,38 @@ namespace BankApp.Services.ApplicationServices
 
             } while (!success);
             return num;
+        }
+
+        public User login()
+        {
+            User user;
+            do
+            {
+                viewHelper.AskQuestion("Enter Username: ");
+                string username = Console.ReadLine();
+
+                viewHelper.AskQuestion("Enter Password: ");
+                string passsword = Console.ReadLine();
+
+                user = userServices.FindUserByUsernameAndPassword(username, passsword);
+
+                if (user != null)
+                {
+                    return user;
+                }
+
+                viewHelper.ErrorMessage("\n Credentials are invalid! \n");
+                viewHelper.AskQuestion(" \n Would you like create a new account: \n Yes:y or No:n \n Enter:");
+                string option = Console.ReadLine().ToLower();
+
+                if(option == "yes" || option == "y")
+                {
+                    return null;
+                }
+
+ 
+
+            } while (true);
         }
 
         public User newUser()
@@ -138,9 +170,9 @@ namespace BankApp.Services.ApplicationServices
 
                 User user = new User(name, email, password, username);
 
-                viewHelper.Message(user.ToString());
-
-                viewHelper.Message("Does This Information Look Correct ?");
+                viewHelper.Message("\n" + user.ToString() + "\n");
+                
+                viewHelper.Message("\n" +  "Does This Information Look Correct ?" + "\n");
                 viewHelper.Message("Yes, No, or Exit");
                 viewHelper.AskQuestion("Enter :");
                 

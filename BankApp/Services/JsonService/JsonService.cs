@@ -10,30 +10,25 @@ namespace BankApp.Services.JsonService
 {
     public class JsonService : JsonServiceInterface
     {
+        AccessJson accessJsonSer = new AccessJson();
+
         public bool addNewUser(User user)
         {
-            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
-            JObject rss = GetAllData();
-
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
             JArray data = (JArray)rss["Data"];
-
             JObject updatedObject = new JObject(new JProperty("name", user.Name), new JProperty("email", user.Email), new JProperty("password", user.Password), new JProperty("username", user.Username));
-
             data.Add(updatedObject);
-            
-            using (StreamWriter file = File.CreateText(path))
-            using (JsonTextWriter writer = new JsonTextWriter(file))
-            {
-                writer.Formatting = Formatting.Indented;
-                rss.WriteTo(writer);
-            }
+            SetNewUserAccounts(user);
+            accessJsonSer.writeToJsonFille(rss, path);
             return true;
         }
 
         public User getUserByUsername(string username)
         {
 
-            JObject rss = GetAllData();
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
 
             List<JToken> output = rss.SelectToken("Data").Where(user => (string)user["username"] == username).ToList();
 
@@ -41,81 +36,149 @@ namespace BankApp.Services.JsonService
             {
                 return null;
             }
-            else
-            {
-                JToken JUser = output[0];
-                User user = JUser.ToObject<User>();
-                return user;
-            }
+          
+                   JToken JUser = output[0];
+                   User user = JUser.ToObject<User>();
+                   return user;
         }
 
         public IList<User> listOfUser()
         {
-            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
-            using (var jsonFileReader = File.OpenText(path))
-            {
-                string json = jsonFileReader.ReadToEnd();
-                JObject jsonData = JObject.Parse(json);
-                IList<JToken> results = jsonData["Data"].Children().ToList();
-                IList<User> users = new List<User>();
-                foreach (JToken user in results)
-                {
-                    // JToken.ToObject is a helper method that uses JsonSerializer internally
-                    User currentUser = user.ToObject<User>();
-                    users.Add(currentUser);
-                }
-
-                return users;
-            }
+    
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
+            JArray listOfUsersJtoken = (JArray)rss["Data"];
+            IList<User> listOfuserJson = listOfUsersJtoken.ToObject<IList<User>>();
+            return listOfuserJson;
         }
 
         public bool updateExistingUser(User user)
         {
-            JObject rss = GetAllData();
 
-            JArray data = (JArray)rss["Data"];
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
+            JObject data = (JObject)rss["Data"].Where(us => (string)us["username"] == user.Username).FirstOrDefault();
 
-            foreach (JObject u in data)
-            {
-                if ((string)u["username"] == user.Username)
-                {
-                    u["username"] = user.Username;
-                    u["name"] = user.Name;
-                    u["password"] = user.Password;
-                    u["email"] = user.Email;
+            data["username"] = user.Username;
+            data["name"] = user.Name;
+            data["password"] = user.Password;
+            data["email"] = user.Email;
 
-                    string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
-                    File.WriteAllText(path, rss.ToString());
-                    using (StreamWriter file = File.CreateText(path))
-                    using (JsonTextWriter writer = new JsonTextWriter(file))
-                    {
-                        writer.Formatting = Formatting.Indented;
-                        rss.WriteTo(writer);
-                    }
-                    return true;
+            accessJsonSer.writeToJsonFille(rss, path);
+            return true;
 
-                }
-
-                continue;
-            }
-
-            return false;
         }
 
+        public IList<Account> GetAllAccountsByUsername(string username)
+        {
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
 
-        public JObject GetAllData()
+            JArray output = (JArray)rss.SelectToken($"Data.{username}.accounts");
+            IList<Account> listOfAccounts = output.ToObject<IList<Account>>();
+
+            return listOfAccounts;
+        }
+
+        public bool CreateNewAccount(Account account, User user)
         {
 
-            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
-            string json;
+            string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+      
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
 
-            using (var jsonFileReader = File.OpenText(path))
+            JToken output = rss.SelectToken($"Data.{user.Username}.accounts").Where(acc => (string)acc["name"] == account.name).FirstOrDefault();
+
+            if (output != null)
             {
-                json = jsonFileReader.ReadToEnd();
+                return false;
             }
 
-            JObject rss = JObject.Parse(json);
-            return rss;
+            JArray accountsArray = (JArray)rss["Data"][$"{user.Username}"]["accounts"];
+           
+            JToken convertAccount = JToken.FromObject(account);
+
+            accountsArray.Add(convertAccount);
+
+            accessJsonSer.writeToJsonFille(rss, path);
+
+            return true;
+        }
+
+        public bool DeleteAccount(Account account, User user)
+        {
+            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+      
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path); 
+
+            JToken accountInJson = rss["Data"][$"{user.Username}"]["accounts"].Where(acc => (string)acc["name"] == account.name && (string)acc["ownerUsername"] == account.ownerUsername).FirstOrDefault();
+
+            if(accountInJson == null)
+            {
+                return false;
+            }
+
+            accountInJson.Remove();
+            accessJsonSer.writeToJsonFille(rss, path);
+            return true;
+
+
+        }
+
+        public void SetNewUserAccounts(User user)
+        {
+            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+       
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path);
+
+            JObject data = (JObject)rss["Data"];
+            
+            JObject userAccountInfo = new JObject(new JProperty("accounts", new JArray()));
+
+            data.Add(new JProperty($"{user.Username}", userAccountInfo));
+
+            accessJsonSer.writeToJsonFille(rss, path);
+        }
+
+        public Account GetAccountByAccountName(string username, string name)
+        {
+            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+           
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path); 
+
+            JToken output = rss.SelectToken($"Data.{username}.accounts").Where(acc => (string)acc["name"] == name).FirstOrDefault();
+
+            if(output == null)
+            {
+                return null;
+            }
+
+            Account acc = output.ToObject<Account>();
+
+            return acc;
+        }
+
+        public bool UpdateAccount(Account account)
+        {
+            string path = @"/Users/highsgod/Projects/BankApplication/BankApp/Database/Accounts.json";
+            JObject rss = accessJsonSer.GetDataFromJsonFile(path); ;
+
+            JArray data = (JArray)rss["Data"][account.ownerUsername]["accounts"];
+
+            JObject accountFromData = (JObject)data.Where(acc => (string)acc["name"] == account.name).FirstOrDefault();
+
+            if(accountFromData == null)
+            {
+                return false;
+            }
+
+            accountFromData["amount"] = account.amount;
+
+            accountFromData["name"] = account.name;
+
+            accessJsonSer.writeToJsonFille(rss,path);
+
+            return true;
         }
     }
 }
