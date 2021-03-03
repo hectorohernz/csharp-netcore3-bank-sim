@@ -17,6 +17,7 @@ namespace BankApp.Services.JsonService
             string path = "/Users/highsgod/Projects/BankApplication/BankApp/Database/mock.json";
             JObject rss = accessJsonSer.GetDataFromJsonFile(path);
             JArray data = (JArray)rss["Data"];
+
             JObject updatedObject = new JObject(new JProperty("name", user.Name), new JProperty("email", user.Email), new JProperty("password", user.Password), new JProperty("username", user.Username));
             data.Add(updatedObject);
             SetNewUserAccounts(user);
@@ -37,9 +38,9 @@ namespace BankApp.Services.JsonService
                 return null;
             }
           
-                   JToken JUser = output[0];
-                   User user = JUser.ToObject<User>();
-                   return user;
+             JToken JUser = output[0];
+             User user = JUser.ToObject<User>();
+             return user;
         }
 
         public IList<User> listOfUser()
@@ -111,7 +112,7 @@ namespace BankApp.Services.JsonService
       
             JObject rss = accessJsonSer.GetDataFromJsonFile(path); 
 
-            JToken accountInJson = rss["Data"][$"{user.Username}"]["accounts"].Where(acc => (string)acc["name"] == account.name && (string)acc["ownerUsername"] == account.ownerUsername).FirstOrDefault();
+            JToken accountInJson = rss["Data"][$"{user.Username}"]["accounts"].Where(acc => (string)acc["name"] == account.name && (string)acc["ownerUsername"] == account.ownerUsername).First();
 
             if(accountInJson == null)
             {
@@ -146,7 +147,7 @@ namespace BankApp.Services.JsonService
            
             JObject rss = accessJsonSer.GetDataFromJsonFile(path); 
 
-            JToken output = rss.SelectToken($"Data.{username}.accounts").Where(acc => (string)acc["name"] == name).FirstOrDefault();
+            JToken output = rss.SelectToken($"Data.{username}.accounts").Where(acc => (string)acc["name"] == name).First();
 
             if(output == null)
             {

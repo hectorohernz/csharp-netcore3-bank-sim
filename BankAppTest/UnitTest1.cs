@@ -28,11 +28,12 @@ namespace BankAppTest
 
             IList<User> isUser = jsonService.listOfUser();
 
-            int exepected = 4;
+            int exepected = 1;
 
             int acc = isUser.Count;
 
             output.WriteLine("This is my output");
+            output.WriteLine(isUser[0].ToString());
 
             Assert.Equal(exepected, acc);
         }
@@ -60,7 +61,7 @@ namespace BankAppTest
         [Fact]
         public void TestGetUserByUsername()
         {
-            string username = "test2";
+            string username = "johndoe";
 
             JsonService jsonService = new JsonService();
 

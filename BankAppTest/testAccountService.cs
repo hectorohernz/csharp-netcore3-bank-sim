@@ -14,53 +14,52 @@ namespace BankAppTest
         [Fact]
         public void ListOfAccountTest()
         {
-            User user = userSer.FindUserByUsernameAndPassword("test", "test");
+            User user = userSer.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020");
             IList<Account> listOfAccounts = accountServices.ListOfAccount(user);
-
             int acutal = listOfAccounts.Count;
-
-            int expected = 1;
-
+            int expected = 0;
             Assert.Equal(expected, acutal);
         }
 
         [Fact]
         public void CreateAccountTest()
         {
-            User user = userSer.FindUserByUsernameAndPassword("test", "test");
-            Account account = new Account("test-account", 1.00, user.Username);
-            Account acc = accountServices.CreateAccount(account, user);
+            User user = userSer.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020!");
+            Account account = new Account("test-account", 25.00, user.Username);
+            accountServices.CreateAccount(account, user);
 
             IList<Account> listOfAccounts = accountServices.ListOfAccount(user);
 
             int acutal = listOfAccounts.Count;
-            int expected = 2;
+            int expected = 1;
             Assert.Equal(expected, acutal);
         }
 
         [Fact]
         public void WithdrawAccountTest()
         {
-            User user = userSer.FindUserByUsernameAndPassword("test", "test");
-            Account account = new Account("account", 500.50, user.Username);
-            bool acc = accountServices.WithdrawAccount(account,500.00);
-            Assert.True(true);
+            User user = userSer.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020!");
+            Account account = jsonService.GetAccountByAccountName(user.Username, "test-account");
+            bool acc = accountServices.WithdrawAccount(account,10.00);
+            Assert.True(acc);
         }
 
         [Fact]
         public void DepositAccountTest()
         {
-            User user = userSer.FindUserByUsernameAndPassword("test", "test");
-            Account account = new Account("account", 500.50, user.Username);
-            bool acc = accountServices.WithdrawAccount(account, -100.20);
-            Assert.False(acc);
+            User user = userSer.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020!");
+            Account account = jsonService.GetAccountByAccountName(user.Username, "test-account");
+            bool acc = accountServices.DepositAccount(account, 100.20);
+            Assert.True(acc);
         }
 
         [Fact]
         public void DeleteAccountTest()
         {
-                         
-            // Implement 
+            User user = userSer.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020!");
+            Account account = jsonService.GetAccountByAccountName(user.Username, "test-account");
+            bool acc = accountServices.DeleteAccount(account, user);
+            Assert.True(acc);
         }
 
 

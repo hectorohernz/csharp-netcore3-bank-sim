@@ -1,16 +1,10 @@
 {
   "Data": [
     {
-      "name": "test test",
-      "email": "test@gmail.com",
-      "password": "test",
-      "username": "test"
-    },
-    {
-      "name": "test2 test2",
-      "email": "test2@gmail.com",
-      "password": "test2",
-      "username": "test2"
+      "name": "John Doe",
+      "email": "JohnDoe@gmail.com",
+      "password": "johnDoeLovesPets2020!",
+      "username": "johndoe"
     }
   ]
 }

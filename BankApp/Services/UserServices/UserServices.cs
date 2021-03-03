@@ -11,6 +11,14 @@ namespace BankApp.Services.UserServices
 
         public User CreateNewUser(User user)
         {
+           
+            User isUser = FindUserByUsername(user.Username);
+
+            if (isUser != null)
+            {
+                return null;
+            }
+            
             jsonService.addNewUser(user);
             return user;
         }
@@ -30,6 +38,8 @@ namespace BankApp.Services.UserServices
             IList<User> listOfUser = jsonService.listOfUser();
 
             User user = listOfUser.Where(us => us.Username == username && us.Password == password).FirstOrDefault();
+
+            
 
             return user;
         }

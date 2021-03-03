@@ -19,24 +19,38 @@ namespace BankApp.Services.AccountServices
             return account;
         }
 
-        public bool DeleteAccount(Account account)
+        public bool DeleteAccount(Account account, User user)
         {
-            throw new NotImplementedException();
+            bool isAccountDeleted = jsonService.DeleteAccount(account, user);
+            return isAccountDeleted;
         }
 
         public bool DepositAccount(Account account, double amount)
         {
-            throw new NotImplementedException();
+            if(amount <= 0)
+            {
+                return false;
+            }
+
+            account.deposit(amount);
+            return jsonService.UpdateAccount(account);
         }
 
         public IList<Account> ListOfAccount(User user)
         {
-            throw new NotImplementedException();
+            return jsonService.GetAllAccountsByUsername(user.Username);
         }
 
         public bool WithdrawAccount(Account account, double amount)
         {
-            throw new NotImplementedException();
+            if (0 > account.amount - amount)
+            {
+                return false;
+            }
+
+            account.withdraw(amount);
+            bool updatedAccount = jsonService.UpdateAccount(account);
+            return updatedAccount;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using BankApp.Models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace BankAppTest
 {
@@ -9,14 +10,24 @@ namespace BankAppTest
 
         BankApp.Services.UserServices.UserServices userServices = new BankApp.Services.UserServices.UserServices();
         BankApp.Services.JsonService.JsonService jsonService = new BankApp.Services.JsonService.JsonService();
-       
+
+        private readonly ITestOutputHelper output;
+
+
+        public TestAccountServices(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
 
         [Fact]
         public void testCreateNewAccount()
         {
-            User user = userServices.FindUserByUsernameAndPassword("test", "test");
+            User user = userServices.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020");
+            output.WriteLine(user.ToString());
+
             Account account = new Account("savings", 500.50, user.Username);
             bool isAccountCreated = jsonService.CreateNewAccount(account, user);
+            output.WriteLine(user.ToString());
             Assert.True(isAccountCreated);
         }
 
@@ -24,27 +35,24 @@ namespace BankAppTest
         [Fact]
         public void testGetAccountByName()
         {
-            string accountName = "savings";
-            User user = userServices.FindUserByUsernameAndPassword("test", "test");
+            string accountName = "test-account";
+
+            User user = userServices.FindUserByUsernameAndPassword("johndoe", "johnDoeLovesPets2020!");
 
             Account account = jsonService.GetAccountByAccountName(user.Username, accountName);
-            Account test = new Account("savings", 500.50, user.Username);
-
-            Assert.Equal(account.name, test.name);
-            Assert.Equal(account.ownerUsername, test.ownerUsername);
-            Assert.Equal(account.amount, test.amount);
+            Assert.Null(account);
         }
 
         [Fact]
         public void testUpdateAccount()
         {
-            string accountName = "savings";
+            string accountName = "test-account";
             User user = userServices.FindUserByUsernameAndPassword("test", "test");
 
 
             Account account = jsonService.GetAccountByAccountName(user.Username, accountName);
 
-            account.amount = 20.25;
+            account.deposit(500);
 
             bool isUpdatedAccount = jsonService.UpdateAccount(account);
 

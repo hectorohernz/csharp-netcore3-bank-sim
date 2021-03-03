@@ -21,10 +21,10 @@ namespace BankAppTest
         [Fact]
         public void TestCreateNewUser()
         {
-            string name = "test2 test2";
-            string email = "test2@gmail.com";
-            string password = "test2";
-            string username = "test2";
+            string name = "John Doe";
+            string email = "JohnDoe@gmail.com";
+            string password = "johnDoeLovesPets2020!";
+            string username = "johndoe";
             User tempUser = new User(name, email, password, username);
            
             User user = userSer.CreateNewUser(tempUser);
@@ -37,10 +37,10 @@ namespace BankAppTest
         public void TestCreateNewUserIsNull()
         {
             // User is already in the mockdata base, should return null because username is already used.
-            string name = "Hector Hernandez";
-            string email = "hector@gmail.com";
-            string password = "password1";
-            string username = "testingusername";
+            string name = "John Doe";
+            string email = "JohnDoe@gmail.com";
+            string password = "johnDoeLovesPets2020!";
+            string username = "johndoe";
             User tempUser = new User(name, email, password, username);
             User user = userSer.CreateNewUser(tempUser);
             Assert.Null(user);
@@ -59,18 +59,18 @@ namespace BankAppTest
         [Fact] // Should return user infomation 
         public void TestFindByUsernameIsFound()
         {
-            string username = "testingusername";
+            string username = "johndoe";
 
             User user = userSer.FindUserByUsername(username);
 
-            Assert.NotNull(user);
+            Assert.Equal(username, user.Username);
         }
 
 
         [Fact] // Should return null : Because password is wrong 
         public void TestLoginBasedOnWrongPassword()
         {
-            string username = "testingusername";
+            string username = "johndoe";
 
             string password = "";
 
@@ -97,12 +97,12 @@ namespace BankAppTest
         [Fact] // Should return user : Because username is true but password is true 
         public void TestingLoginBasedOnTrueInfomation()
         {
-            string username = "testingusername";
+            string username = "johndoe";
 
-            string password = "password1";
+            string password = "johnDoeLovesPets2020!";
 
             User user = userSer.FindUserByUsernameAndPassword(username, password);
-
+            output.WriteLine(user.ToString());
             Assert.NotNull(user);
         }
 
