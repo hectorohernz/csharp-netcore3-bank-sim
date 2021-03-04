@@ -1,7 +1,13 @@
 {
   "Data": {
     "johndoe": {
-      "accounts": []
+      "accounts": [
+        {
+          "name": "savings",
+          "amount": 500.0,
+          "ownerUsername": "johndoe"
+        }
+      ]
     }
   }
 }

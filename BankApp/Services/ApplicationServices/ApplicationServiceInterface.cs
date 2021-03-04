@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BankApp.Models;
 
 namespace BankApp.Services.ApplicationServices
@@ -12,5 +13,13 @@ namespace BankApp.Services.ApplicationServices
         User newUser();
 
         User login();
+
+        void userGreeting(User user);
+
+        void accountPrompt(User user);
+
+        void createNewAccount(User user);
+
+        void modifyAccounts(User user, IList<Account> listOfAccounts);
     }
 }

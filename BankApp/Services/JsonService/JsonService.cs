@@ -147,7 +147,7 @@ namespace BankApp.Services.JsonService
            
             JObject rss = accessJsonSer.GetDataFromJsonFile(path); 
 
-            JToken output = rss.SelectToken($"Data.{username}.accounts").Where(acc => (string)acc["name"] == name).First();
+            JToken output = rss.SelectToken($"Data.{username}.accounts").Where(acc => (string)acc["name"] == name).FirstOrDefault();
 
             if(output == null)
             {

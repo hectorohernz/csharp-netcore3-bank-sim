@@ -36,6 +36,12 @@ namespace BankApp.Services.AccountServices
             return jsonService.UpdateAccount(account);
         }
 
+        public Account GetAccount(string name, User user)
+        {
+            Account acc = jsonService.GetAccountByAccountName(user.Username, name);
+            return acc;
+        }
+
         public IList<Account> ListOfAccount(User user)
         {
             return jsonService.GetAllAccountsByUsername(user.Username);

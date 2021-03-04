@@ -41,17 +41,10 @@ namespace BankApp.Application
                     viewHelper.Successmessage("\n Thanks For Signing up \n");
                 }
             }
+            appSer.userGreeting(user);
+            appSer.accountPrompt(user);
 
 
-            do
-            {
-
-
-
-            } while (true);
-
-
-     
 
         }
 

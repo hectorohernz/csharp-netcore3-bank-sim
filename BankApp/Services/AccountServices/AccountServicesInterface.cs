@@ -15,5 +15,7 @@ namespace BankApp.Services.AccountServices
         bool DepositAccount(Account account, double amount);
 
         bool DeleteAccount(Account account, User user);
+
+        Account GetAccount(string name, User user);
     }
 }
