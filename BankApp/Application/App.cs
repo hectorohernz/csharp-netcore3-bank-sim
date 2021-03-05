@@ -42,10 +42,18 @@ namespace BankApp.Application
                 }
             }
             appSer.userGreeting(user);
-            appSer.accountPrompt(user);
+            while (true)
+            {
+                appSer.accountPrompt(user);
+                viewHelper.AskQuestion("\n Would you like to exit application ?");
+                string isUserDone = Console.ReadLine().Trim().ToLower();
+                if(isUserDone == "true" || isUserDone == "yes")
+                {
+                    viewHelper.Message("\n Thank you for using E-Corp Banking.\n");
+                    System.Environment.Exit(1);
+                }
 
-
-
+            }
         }
 
     }

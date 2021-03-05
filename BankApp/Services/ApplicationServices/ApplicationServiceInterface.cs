@@ -21,5 +21,7 @@ namespace BankApp.Services.ApplicationServices
         void createNewAccount(User user);
 
         void modifyAccounts(User user, IList<Account> listOfAccounts);
+
+        void exitProgram(string answer);
     }
 }

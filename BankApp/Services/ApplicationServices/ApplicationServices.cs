@@ -231,10 +231,9 @@ namespace BankApp.Services.ApplicationServices
                 Account account = new Account(name, 0, user.Username);
                 accountServices.CreateAccount(account, user);
             }
-            else if (answer == "exit" || answer == "exit")
+            else if(answer == "exit")
             {
-                viewHelper.Successmessage("\n Thank you for using E-Corp Banking.\n");
-                System.Environment.Exit(1);
+                exitProgram(answer);
             }
         }
 
@@ -251,12 +250,6 @@ namespace BankApp.Services.ApplicationServices
                     {
                         viewHelper.AskQuestion("\n Enter Account Name: ");
                         answer = Console.ReadLine().ToLower().Trim();
-
-                        if (answer == "exit" || answer == "e")
-                        {
-                            break;
-                        }
-
                         acc = accountServices.GetAccount(answer, user);
 
                         if (acc == null)
@@ -266,14 +259,13 @@ namespace BankApp.Services.ApplicationServices
                         }
 
                         break;
-
                     }
-
                     while (true)
                     {
                         viewHelper.AskQuestion($"\n Current Balance ${acc.amount}");
                         viewHelper.AskQuestion($"\n Would you like deposit, withdraw from {acc.name}: ");
                         answer = Console.ReadLine().ToLower().Trim();
+
                         if (answer == "deposit" || answer == "d")
                         {
                             viewHelper.AskQuestion($"\nAmount Deposit : ");
@@ -292,10 +284,19 @@ namespace BankApp.Services.ApplicationServices
                                 viewHelper.ErrorMessage("Deposit was unsuccessful !");
                                 continue;
                             }
+                            else
+                            {
+                                viewHelper.Successmessage("Withdraw was Successful.\n");
+                                viewHelper.AskQuestion("Would you like to exit the program ?");
+                                answer = Console.ReadLine();
+                                exitProgram(answer);
+                            }
+                            continue;
+
                         }
                         else if (answer == "withdraw" )
                         {
-                            viewHelper.AskQuestion($"\nAmount Deposit: ");
+                            viewHelper.AskQuestion($"\nAmount Withdraw: ");
                             int num;
                             string inputNumber = Console.ReadLine().Trim();
                             bool success = Int32.TryParse(inputNumber, out num);
@@ -310,21 +311,34 @@ namespace BankApp.Services.ApplicationServices
                             if (!isDepositSuccessful)
                             {
                                 viewHelper.ErrorMessage("Withdraw was unsuccessful !");
-                                continue;
                             }
+                            else
+                            {
+                                viewHelper.Successmessage("Withdraw was Successful.\n");
+                                viewHelper.AskQuestion("Would you like to exit the program ?");
+                                answer = Console.ReadLine();
+                                exitProgram(answer);
+                            }
+                            continue;
                         }
-
-                         viewHelper.ErrorMessage("\n Option Doesn't Exist!");
-                         break;
+                        else if(answer == "exit" || answer == "home")
+                        {
+                            break;
+                        }
+                        continue;
                     }
-                }
-                else if (answer == "exit" || answer == "exit")
-                {
-                    viewHelper.Successmessage("\n Thank you for using E-Corp Banking.\n");
-                    System.Environment.Exit(1);
                 }
             }
 
+        }
+
+        public void exitProgram(string answer)
+        {
+             if (answer == "exit" || answer == "yes")
+            {
+                viewHelper.Successmessage("\n Thank you for using E-Corp Banking.\n");
+                System.Environment.Exit(1);
+            }
         }
     }
 }

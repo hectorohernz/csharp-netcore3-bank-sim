@@ -28,7 +28,7 @@ namespace BankApp.Models
 
         public override string ToString()
         {
-            return $"Name: {this.name}          Amount: {this.amount}           Owner: {this.ownerUsername}";
+            return $"Name: {this.name}          Amount: ${this.amount}           Owner: {this.ownerUsername}";
         }
     }
 }
